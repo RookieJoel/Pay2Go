@@ -18,6 +18,76 @@ This document walks through the complete Software Development Life Cycle (SDLC) 
 
 ---
 
+## 🚀 QUICK START
+
+### Prerequisites
+- Go 1.21 or higher
+- Docker & Docker Compose
+- Make (optional, for automation)
+
+### Setup & Run
+
+```bash
+# 1. Clone the repository
+git clone <your-repo-url>
+cd Pay2Go
+
+# 2. Install dependencies
+go mod download
+
+# 3. Copy environment file
+cp .env.example .env
+
+# 4. Start PostgreSQL database
+make docker-up
+# or manually: docker-compose up -d
+
+# 5. Run database migrations
+make migrate-up
+
+# 6. Create a test partner (run SQL in database)
+# Connect to database and run:
+# INSERT INTO partners (id, name, email, api_key_hash, status, created_at, updated_at)
+# VALUES (gen_random_uuid(), 'Test Partner', 'test@example.com', 
+#         '$2a$10$hash...', 'active', NOW(), NOW());
+
+# 7. Run the application
+make run
+# or: go run cmd/api/main.go
+
+# 8. Test the API
+curl http://localhost:8080/api/v1/health
+# Expected: {"status":"ok"}
+```
+
+### Run Tests
+
+```bash
+# Run all tests
+make test
+
+# Run tests with coverage
+make test-coverage
+
+# Run specific test
+go test -v ./tests/unit/domain/
+```
+
+### Build for Production
+
+```bash
+# Build binary
+make build
+
+# Run built binary
+./bin/pay2go
+
+# Or build Docker image
+make docker-build
+```
+
+---
+
 ## 🎯 PHASE 1: REQUIREMENTS ANALYSIS
 
 ### Why This Phase Matters
