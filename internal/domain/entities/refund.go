@@ -24,26 +24,26 @@ type Refund struct {
 	// Identity
 	ID            uuid.UUID
 	TransactionID uuid.UUID
-	
+
 	// Value Object
-	Amount        valueobjects.Money
-	
+	Amount valueobjects.Money
+
 	// State
-	Status        RefundStatus
-	Reason        string
-	
+	Status RefundStatus
+	Reason string
+
 	// Provider details
 	ProviderRefundID string
-	
+
 	// Error handling
-	ErrorCode     string
-	ErrorMessage  string
-	
+	ErrorCode    string
+	ErrorMessage string
+
 	// Timestamps
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	ProcessedAt   *time.Time
-	DeletedAt     *time.Time
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	ProcessedAt *time.Time
+	DeletedAt   *time.Time
 }
 
 // NewRefund creates a new refund with validation
@@ -52,23 +52,23 @@ func NewRefund(
 	amount valueobjects.Money,
 	reason string,
 ) (*Refund, error) {
-	
+
 	// Validate required fields
 	if transactionID == uuid.Nil {
 		return nil, errors.NewValidationError("transaction_id", "cannot be empty")
 	}
-	
+
 	if reason == "" {
 		return nil, errors.NewValidationError("reason", "cannot be empty")
 	}
-	
+
 	// Validate amount
 	if !amount.Currency.IsValid() {
 		return nil, errors.ErrInvalidCurrency
 	}
-	
+
 	now := time.Now()
-	
+
 	return &Refund{
 		ID:            uuid.New(),
 		TransactionID: transactionID,
@@ -88,7 +88,7 @@ func (r *Refund) MarkAsProcessing() error {
 			"can only process pending refunds",
 		)
 	}
-	
+
 	r.Status = RefundStatusProcessing
 	r.UpdatedAt = time.Now()
 	return nil
@@ -102,7 +102,7 @@ func (r *Refund) MarkAsCompleted(providerRefundID string) error {
 			"can only complete processing refunds",
 		)
 	}
-	
+
 	now := time.Now()
 	r.Status = RefundStatusCompleted
 	r.ProviderRefundID = providerRefundID
@@ -110,7 +110,7 @@ func (r *Refund) MarkAsCompleted(providerRefundID string) error {
 	r.UpdatedAt = now
 	r.ErrorCode = ""
 	r.ErrorMessage = ""
-	
+
 	return nil
 }
 
@@ -122,12 +122,12 @@ func (r *Refund) MarkAsFailed(errorCode, errorMessage string) error {
 			"can only fail pending or processing refunds",
 		)
 	}
-	
+
 	r.Status = RefundStatusFailed
 	r.ErrorCode = errorCode
 	r.ErrorMessage = errorMessage
 	r.UpdatedAt = time.Now()
-	
+
 	return nil
 }
 

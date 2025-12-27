@@ -1,0 +1,55 @@
+package middleware
+package middleware
+
+import (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}	return err	)		"ip="+c.IP(),		"duration="+duration.String(),		"status="+string(rune(c.Response().StatusCode())),		"path="+c.Path(),		"method="+c.Method(),		"partner_id="+partnerID,		"request_id="+requestID,	println("HTTP Request:",	// Structured log (in production, use proper logger like zerolog)	}		}			partnerID = id.String()		if id, ok := pid.(uuid.UUID); ok {	if pid := c.Locals("partner_id"); pid != nil {	partnerID := ""	// Get partner ID if authenticated	duration := time.Since(start)	// Log after request completes	err := c.Next()	// Continue to next middleware/handler	c.Set("X-Request-ID", requestID)	c.Locals("request_id", requestID)	requestID := uuid.New().String()	// Generate request ID	start := time.Now()func (m *Logger) Handle(c *fiber.Ctx) error {// Handle logs request details}	return &Logger{}func NewLogger() *Logger {// NewLogger creates a new logger middlewaretype Logger struct{}// Logger middleware logs HTTP requests with structured format)	"github.com/google/uuid"	"github.com/gofiber/fiber/v2"	"time"
